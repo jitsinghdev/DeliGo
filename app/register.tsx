@@ -1,8 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
-import { Platform, Pressable, StyleSheet, TextInput, Image, TouchableOpacity, View as RNView } from 'react-native';
-import { Text, View } from '@/components/Themed';
+import { Platform, Pressable, StyleSheet, TextInput, Image, TouchableOpacity, View, Text } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function RegisterScreen() {
   const router = useRouter();
@@ -30,7 +30,7 @@ export default function RegisterScreen() {
         autoCapitalize="none"
         placeholderTextColor="#B0B0B0"
       />
-      <RNView style={styles.passwordContainer}>
+      <View style={styles.passwordContainer}>
         <TextInput
           style={styles.passwordInput}
           placeholder="Contraseña"
@@ -38,10 +38,15 @@ export default function RegisterScreen() {
           placeholderTextColor="#B0B0B0"
         />
         <Pressable onPress={() => setShowPassword(!showPassword)}>
-          <Text style={styles.toggle}>👁️</Text>
+          <Text style={styles.toggle}><Ionicons
+            name={showPassword ? 'eye-off' : 'eye'}
+            size={22}
+            color="#2ECC71"
+            style={styles.toggle}
+          /></Text>
         </Pressable>
-      </RNView>
-      <RNView style={styles.passwordContainer}>
+      </View>
+      <View style={styles.passwordContainer}>
         <TextInput
           style={styles.passwordInput}
           placeholder="Confirmar contraseña"
@@ -49,9 +54,14 @@ export default function RegisterScreen() {
           placeholderTextColor="#B0B0B0"
         />
         <Pressable onPress={() => setShowPassword(!showPassword)}>
-          <Text style={styles.toggle}>👁️</Text>
+          <Text style={styles.toggle}><Ionicons
+            name={showPassword ? 'eye-off' : 'eye'}
+            size={22}
+            color="#2ECC71"
+            style={styles.toggle}
+          /></Text>
         </Pressable>
-      </RNView>
+      </View>
 
       <Pressable style={styles.button}>
         <Text style={styles.buttonText}>Registrarse</Text>

@@ -1,10 +1,28 @@
+import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Platform, Pressable, StyleSheet, TextInput, Image, TouchableOpacity } from 'react-native';
+import { Platform, Pressable, StyleSheet, TextInput, Image, TouchableOpacity, Alert } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { useRouter } from 'expo-router';
+import { login } from '@/api/auth';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function ModalScreen() {
   const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
+
+  const handleLogin = async () => {
+    try {
+      await login({ email, password });
+      // Aquí podrías navegar a la pantalla principal
+      router.back()
+    } catch (e: any) {
+      Alert.alert('Error', e.message || 'No se pudo iniciar sesión');
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Image
@@ -19,14 +37,30 @@ export default function ModalScreen() {
         keyboardType="email-address"
         autoCapitalize="none"
         placeholderTextColor="#B0B0B0"
+        value={email}
+        onChangeText={setEmail}
       />
-      <TextInput
-        style={styles.input}
-        placeholder="Contraseña"
-        secureTextEntry
-        placeholderTextColor="#B0B0B0"
-      />
-      <Pressable style={styles.button}>
+      <View style={{ width: '100%', position: 'relative' }}>
+        <TextInput
+          style={styles.input}
+          placeholder="Contraseña"
+          secureTextEntry={!showPassword}
+          placeholderTextColor="#B0B0B0"
+          value={password}
+          onChangeText={setPassword}
+        />
+        <Pressable
+          onPress={() => setShowPassword(!showPassword)}
+          style={{ position: 'absolute', right: 18, top: 18 }}
+        >
+          <Ionicons
+            name={showPassword ? 'eye-off' : 'eye'}
+            size={22}
+            color="#2ECC71"
+          />
+        </Pressable>
+      </View>
+      <Pressable style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Entrar</Text>
       </Pressable>
       <TouchableOpacity
