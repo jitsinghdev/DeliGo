@@ -3,83 +3,101 @@ import { Platform, Pressable, StyleSheet, TextInput, Image, TouchableOpacity, Vi
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
+import { KeyboardAvoidingView, ScrollView } from 'react-native';
 
 export default function RegisterScreen() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <View style={styles.container}>
-      <Image
-        source={require('../assets/images/icon.png')}
-        style={styles.image}
-        resizeMode="contain"
-      />
-      <Text style={styles.title}>Crear cuenta</Text>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      // Ajusta si el header de navegación tapa algo (prueba 80–100)
+      keyboardVerticalOffset={Platform.select({ ios: 80, android: 0 })}
+    >
+      <ScrollView
+        contentContainerStyle={styles.scroll}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={styles.container}>
+          <Image
+            source={require('../assets/images/icon.png')}
+            style={styles.image}
+            resizeMode="contain"
+          />
+          <Text style={styles.title}>Crear cuenta</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Nombre completo"
-        autoCapitalize="words"
-        placeholderTextColor="#B0B0B0"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        keyboardType="email-address"
-        autoCapitalize="none"
-        placeholderTextColor="#B0B0B0"
-      />
-      <View style={styles.passwordContainer}>
-        <TextInput
-          style={styles.passwordInput}
-          placeholder="Contraseña"
-          secureTextEntry={!showPassword}
-          placeholderTextColor="#B0B0B0"
-        />
-        <Pressable onPress={() => setShowPassword(!showPassword)}>
-          <Text style={styles.toggle}><Ionicons
-            name={showPassword ? 'eye-off' : 'eye'}
-            size={22}
-            color="#2ECC71"
-            style={styles.toggle}
-          /></Text>
-        </Pressable>
-      </View>
-      <View style={styles.passwordContainer}>
-        <TextInput
-          style={styles.passwordInput}
-          placeholder="Confirmar contraseña"
-          secureTextEntry={!showPassword}
-          placeholderTextColor="#B0B0B0"
-        />
-        <Pressable onPress={() => setShowPassword(!showPassword)}>
-          <Text style={styles.toggle}><Ionicons
-            name={showPassword ? 'eye-off' : 'eye'}
-            size={22}
-            color="#2ECC71"
-            style={styles.toggle}
-          /></Text>
-        </Pressable>
-      </View>
+          <TextInput
+            style={styles.input}
+            placeholder="Nombre completo"
+            autoCapitalize="words"
+            placeholderTextColor="#B0B0B0"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            placeholderTextColor="#B0B0B0"
+          />
+          <View style={styles.passwordContainer}>
+            <TextInput
+              style={styles.passwordInput}
+              placeholder="Contraseña"
+              secureTextEntry={!showPassword}
+              placeholderTextColor="#B0B0B0"
+            />
+            <Pressable onPress={() => setShowPassword(!showPassword)}>
+              <Text style={styles.toggle}><Ionicons
+                name={showPassword ? 'eye-off' : 'eye'}
+                size={22}
+                color="#2ECC71"
+                style={styles.toggle}
+              /></Text>
+            </Pressable>
+          </View>
+          <View style={styles.passwordContainer}>
+            <TextInput
+              style={styles.passwordInput}
+              placeholder="Confirmar contraseña"
+              secureTextEntry={!showPassword}
+              placeholderTextColor="#B0B0B0"
+            />
+            <Pressable onPress={() => setShowPassword(!showPassword)}>
+              <Text style={styles.toggle}><Ionicons
+                name={showPassword ? 'eye-off' : 'eye'}
+                size={22}
+                color="#2ECC71"
+                style={styles.toggle}
+              /></Text>
+            </Pressable>
+          </View>
 
-      <Pressable style={styles.button}>
-        <Text style={styles.buttonText}>Registrarse</Text>
-      </Pressable>
+          <Pressable style={styles.button}>
+            <Text style={styles.buttonText}>Registrarse</Text>
+          </Pressable>
 
-      <TouchableOpacity style={styles.secondaryAction} onPress={() => router.back()}>
-        <Text style={styles.secondaryText}>
-          ¿Ya tienes cuenta?{' '}
-          <Text style={styles.link}>Inicia sesión</Text>
-        </Text>
-      </TouchableOpacity>
+          <TouchableOpacity style={styles.secondaryAction} onPress={() => router.back()}>
+            <Text style={styles.secondaryText}>
+              ¿Ya tienes cuenta?{' '}
+              <Text style={styles.link}>Inicia sesión</Text>
+            </Text>
+          </TouchableOpacity>
 
-      <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
-    </View>
+          <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
+
   );
 }
 
 const styles = StyleSheet.create({
+  scroll: {
+    flexGrow: 1,
+    backgroundColor: '#fff',
+  },
   container: {
     flex: 1,
     alignItems: 'center',

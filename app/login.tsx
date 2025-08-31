@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Platform, Pressable, StyleSheet, TextInput, Image, TouchableOpacity, Alert } from 'react-native';
+import { Platform, Pressable, StyleSheet, TextInput, Image, TouchableOpacity, Alert, KeyboardAvoidingView, ScrollView } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { useRouter } from 'expo-router';
 import { login } from '@/api/auth';
@@ -15,69 +15,86 @@ export default function ModalScreen() {
 
   const handleLogin = async () => {
     try {
-      await login({ email, password });
+      Alert.alert('Error', 'No se pudo iniciar sesión');
+      // await login({ email, password });
       // Aquí podrías navegar a la pantalla principal
-      router.back()
+      // router.back()
     } catch (e: any) {
       Alert.alert('Error', e.message || 'No se pudo iniciar sesión');
     }
   };
 
   return (
-    <View style={styles.container}>
-      <Image
-        source={require('../assets/images/icon.png')}
-        style={styles.image}
-        resizeMode="contain"
-      />
-      <Text style={styles.title}>Inicia sesión</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        keyboardType="email-address"
-        autoCapitalize="none"
-        placeholderTextColor="#B0B0B0"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <View style={{ width: '100%', position: 'relative' }}>
-        <TextInput
-          style={styles.input}
-          placeholder="Contraseña"
-          secureTextEntry={!showPassword}
-          placeholderTextColor="#B0B0B0"
-          value={password}
-          onChangeText={setPassword}
-        />
-        <Pressable
-          onPress={() => setShowPassword(!showPassword)}
-          style={{ position: 'absolute', right: 18, top: 18 }}
-        >
-          <Ionicons
-            name={showPassword ? 'eye-off' : 'eye'}
-            size={22}
-            color="#2ECC71"
-          />
-        </Pressable>
-      </View>
-      <Pressable style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Entrar</Text>
-      </Pressable>
-      <TouchableOpacity
-        style={styles.secondaryAction}
-        onPress={() => router.push('/register')}
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      // Ajusta si el header de navegación tapa algo (prueba 80–100)
+      keyboardVerticalOffset={Platform.select({ ios: 80, android: 0 })}
+    >
+      <ScrollView
+        contentContainerStyle={styles.scroll}
+        keyboardShouldPersistTaps="handled"
       >
-        <Text style={styles.secondaryText}>
-          ¿No tienes cuenta?{' '}
-          <Text style={styles.link}>Crear cuenta</Text>
-        </Text>
-      </TouchableOpacity>
-      <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
-    </View>
+        <View style={styles.container}>
+          <Image
+            source={require('../assets/images/icon.png')}
+            style={styles.image}
+            resizeMode="contain"
+          />
+          <Text style={styles.title}>Inicia sesión</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            placeholderTextColor="#B0B0B0"
+            value={email}
+            onChangeText={setEmail}
+          />
+          <View style={{ width: '100%', position: 'relative' }}>
+            <TextInput
+              style={styles.input}
+              placeholder="Contraseña"
+              secureTextEntry={!showPassword}
+              placeholderTextColor="#B0B0B0"
+              value={password}
+              onChangeText={setPassword}
+            />
+            <Pressable
+              onPress={() => setShowPassword(!showPassword)}
+              style={{ position: 'absolute', right: 18, top: 18 }}
+            >
+              <Ionicons
+                name={showPassword ? 'eye-off' : 'eye'}
+                size={22}
+                color="#2ECC71"
+              />
+            </Pressable>
+          </View>
+          <Pressable style={styles.button} onPress={handleLogin}>
+            <Text style={styles.buttonText}>Entrar</Text>
+          </Pressable>
+          <TouchableOpacity
+            style={styles.secondaryAction}
+            onPress={() => router.push('/register')}
+          >
+            <Text style={styles.secondaryText}>
+              ¿No tienes cuenta?{' '}
+              <Text style={styles.link}>Crear cuenta</Text>
+            </Text>
+          </TouchableOpacity>
+          <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
+  scroll: {
+    flexGrow: 1,
+    backgroundColor: '#fff',
+  },
   container: {
     flex: 1,
     alignItems: 'center',
