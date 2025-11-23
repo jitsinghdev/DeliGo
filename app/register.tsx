@@ -1,13 +1,44 @@
 import { StatusBar } from 'expo-status-bar';
-import { Platform, Pressable, StyleSheet, TextInput, Image, TouchableOpacity, View, Text } from 'react-native';
+import { Platform, Pressable, StyleSheet, TextInput, Image, TouchableOpacity, View, Text, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { KeyboardAvoidingView, ScrollView } from 'react-native';
+import { register as registerApi } from '@/src/api/auth';
 
 export default function RegisterScreen() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleRegister = async () => {
+    if (!name || !email || !password || !confirmPassword) {
+      Alert.alert('Campos requeridos', 'Completa todos los campos.');
+      return;
+    }
+    if (password !== confirmPassword) {
+      Alert.alert('Contraseña', 'Las contraseñas no coinciden.');
+      return;
+    }
+    try {
+      setLoading(true);
+      const res = await registerApi({ name, email, password });
+      
+      if (!res?.success) {
+        throw new Error(res?.message?.message ?? 'No se pudo registrar');
+      }
+      Alert.alert('Éxito', 'Cuenta creada. Inicia sesión.');
+      router.back();
+    } catch (e: any) {
+      Alert.alert('Error', e?.message ?? 'No se pudo registrar');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <KeyboardAvoidingView
@@ -33,6 +64,8 @@ export default function RegisterScreen() {
             placeholder="Nombre completo"
             autoCapitalize="words"
             placeholderTextColor="#B0B0B0"
+            value={name}
+            onChangeText={setName}
           />
           <TextInput
             style={styles.input}
@@ -40,6 +73,8 @@ export default function RegisterScreen() {
             keyboardType="email-address"
             autoCapitalize="none"
             placeholderTextColor="#B0B0B0"
+            value={email}
+            onChangeText={setEmail}
           />
           <View style={styles.passwordContainer}>
             <TextInput
@@ -47,6 +82,9 @@ export default function RegisterScreen() {
               placeholder="Contraseña"
               secureTextEntry={!showPassword}
               placeholderTextColor="#B0B0B0"
+              autoCapitalize="none"
+              value={password}
+              onChangeText={setPassword}
             />
             <Pressable onPress={() => setShowPassword(!showPassword)}>
               <Text style={styles.toggle}><Ionicons
@@ -63,6 +101,9 @@ export default function RegisterScreen() {
               placeholder="Confirmar contraseña"
               secureTextEntry={!showPassword}
               placeholderTextColor="#B0B0B0"
+              autoCapitalize="none"
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
             />
             <Pressable onPress={() => setShowPassword(!showPassword)}>
               <Text style={styles.toggle}><Ionicons
@@ -74,7 +115,7 @@ export default function RegisterScreen() {
             </Pressable>
           </View>
 
-          <Pressable style={styles.button}>
+          <Pressable style={[styles.button, loading && { opacity: 0.6 }]} disabled={loading} onPress={handleRegister}>
             <Text style={styles.buttonText}>Registrarse</Text>
           </Pressable>
 
