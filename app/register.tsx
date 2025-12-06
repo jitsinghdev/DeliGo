@@ -58,11 +58,11 @@ export default function RegisterScreen() {
             style={styles.image}
             resizeMode="contain"
           />
-          <Text style={styles.title}>Crear cuenta</Text>
+          <Text style={styles.title}>Create account</Text>
 
           <TextInput
             style={styles.input}
-            placeholder="Nombre completo"
+            placeholder="Full name"
             autoCapitalize="words"
             placeholderTextColor="#B0B0B0"
             value={name}
@@ -80,7 +80,7 @@ export default function RegisterScreen() {
           <View style={styles.passwordContainer}>
             <TextInput
               style={styles.passwordInput}
-              placeholder="Contraseña"
+              placeholder="Password"
               secureTextEntry={!showPassword}
               placeholderTextColor="#B0B0B0"
               autoCapitalize="none"
@@ -99,7 +99,7 @@ export default function RegisterScreen() {
           <View style={styles.passwordContainer}>
             <TextInput
               style={styles.passwordInput}
-              placeholder="Confirmar contraseña"
+              placeholder="Confirm password"
               secureTextEntry={!showPassword}
               placeholderTextColor="#B0B0B0"
               autoCapitalize="none"
@@ -117,13 +117,13 @@ export default function RegisterScreen() {
           </View>
 
           <Pressable style={[styles.button, loading && { opacity: 0.6 }]} disabled={loading} onPress={handleRegister}>
-            <Text style={styles.buttonText}>Registrarse</Text>
+            <Text style={styles.buttonText}>Sign up</Text>
           </Pressable>
 
           <TouchableOpacity style={styles.secondaryAction} onPress={() => router.back()}>
             <Text style={styles.secondaryText}>
-              ¿Ya tienes cuenta?{' '}
-              <Text style={styles.link}>Inicia sesión</Text>
+              Already have an account?{' '}
+              <Text style={styles.link}>Log in</Text>
             </Text>
           </TouchableOpacity>
 

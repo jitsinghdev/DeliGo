@@ -58,7 +58,7 @@ export default function ModalScreen() {
             style={styles.image}
             resizeMode="contain"
           />
-          <Text style={styles.title}>Inicia sesión</Text>
+          <Text style={styles.title}>Log in</Text>
           <TextInput
             style={styles.input}
             placeholder="Email"
@@ -71,7 +71,7 @@ export default function ModalScreen() {
           <View style={{ width: '100%', position: 'relative' }}>
             <TextInput
               style={styles.input}
-              placeholder="Contraseña"
+              placeholder="Password"
               secureTextEntry={!showPassword}
               placeholderTextColor="#B0B0B0"
               value={password}
@@ -89,15 +89,15 @@ export default function ModalScreen() {
             </Pressable>
           </View>
           <Pressable style={styles.button} onPress={handleLogin}>
-            <Text style={styles.buttonText}>Entrar</Text>
+            <Text style={styles.buttonText}>Sign in</Text>
           </Pressable>
           <TouchableOpacity
             style={styles.secondaryAction}
             onPress={() => router.push('/register')}
           >
             <Text style={styles.secondaryText}>
-              ¿No tienes cuenta?{' '}
-              <Text style={styles.link}>Crear cuenta</Text>
+              Don't have an account?{' '}
+              <Text style={styles.link}>Create account</Text>
             </Text>
           </TouchableOpacity>
           <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
