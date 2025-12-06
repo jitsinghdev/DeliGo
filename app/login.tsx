@@ -5,6 +5,9 @@ import { Text, View } from '@/components/Themed';
 import { useRouter } from 'expo-router';
 import { login } from '@/api/auth';
 import { Ionicons } from '@expo/vector-icons';
+import { Toast } from 'toastify-react-native';
+import { login as loginApi } from '@/src/api/auth';
+
 
 export default function ModalScreen() {
   const router = useRouter();
@@ -15,12 +18,26 @@ export default function ModalScreen() {
 
   const handleLogin = async () => {
     try {
-      Alert.alert('Error', 'No se pudo iniciar sesión');
-      // await login({ email, password });
-      // Aquí podrías navegar a la pantalla principal
-      // router.back()
+      if (!email || !password) {
+        Toast.error("Completa todos los campos.");
+        return;
+      }
+
+      const res = await login({ email, password });
+      let message = '';
+      if (typeof res.message === 'string') {
+        message = res.message;
+      }
+
+      if (res.success) {
+        Toast.success(message);
+        router.back();
+      } else {
+        Toast.error(message);
+      }
+
     } catch (e: any) {
-      Alert.alert('Error', e.message || 'No se pudo iniciar sesión');
+      Alert.alert("Error", e.message || "No se pudo iniciar sesión");
     }
   };
 

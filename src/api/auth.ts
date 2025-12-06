@@ -12,25 +12,28 @@ export interface LoginInput {
 type BackendLoginResp = {
     success: boolean;
     message: {
-        token: string;         // viene dentro de "message.token" según tu API
+        token: string;
         message: string;
     };
 };
 
 export async function login(input: LoginInput) {
     const res = await post<BackendLoginResp>('/auth/login', input);
+    if (res.success) {
+        const token = res.message?.token;
+        if (token) {
+            await setToken(token);
+        }
+        const status = res.success !== undefined ? 'success' : 'error';
+        const resultData = {
+            [status]: true,
+            message: res.message?.message
+        };
     
-    if (!res?.success) {
-        throw new Error('Inicio de sesión fallido');
+        return resultData;
     }
     
-    const token = res.message?.token;
-    if (!token) {
-        throw new Error('Token no recibido del servidor');
-    }
-    
-    await setToken(token);
-    return token;
+    return res;
 }
 
 /* ---------- Registro ---------- */
@@ -43,10 +46,7 @@ export interface RegisterInput {
 
 type BackendRegisterResp = {
     success: boolean;
-    message: {
-        token?: string;   // por si el backend devuelve token al crear
-        message: string;
-    };
+    message: string;
 };
 
 /**
@@ -55,9 +55,6 @@ type BackendRegisterResp = {
  */
 export async function register(input: RegisterInput) {
     const res = await post<BackendRegisterResp>('/user/createUser', input);
-    
-    if (!res?.success) {
-        throw new Error('Registro fallido');
-    }
-    
+
+    return res;
 }

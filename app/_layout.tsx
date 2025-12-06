@@ -5,6 +5,8 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
+import ToastManager from "toastify-react-native";
+import { toastConfig } from '@/src/config/toastConfig';
 
 import { useColorScheme } from '@/components/useColorScheme';
 
@@ -54,6 +56,7 @@ function RootLayoutNav() {
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
       </Stack>
+      <ToastManager style={toastConfig}/> 
     </ThemeProvider>
   );
 }

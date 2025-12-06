@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { KeyboardAvoidingView, ScrollView } from 'react-native';
 import { register as registerApi } from '@/src/api/auth';
+import { Toast } from "toastify-react-native";
 
 export default function RegisterScreen() {
   const router = useRouter();
@@ -17,24 +18,24 @@ export default function RegisterScreen() {
 
   const handleRegister = async () => {
     if (!name || !email || !password || !confirmPassword) {
-      Alert.alert('Campos requeridos', 'Completa todos los campos.');
+      Toast.error("Completa todos los campos.");
       return;
     }
     if (password !== confirmPassword) {
-      Alert.alert('Contraseña', 'Las contraseñas no coinciden.');
+      Toast.error("Las contraseñas no coinciden.");
       return;
     }
     try {
       setLoading(true);
       const res = await registerApi({ name, email, password });
       
-      if (!res?.success) {
-        throw new Error(res?.message?.message ?? 'No se pudo registrar');
+      Toast[res.success ? "success" : "error"](res.message);
+      if (res.success) {
+        router.back();
       }
-      Alert.alert('Éxito', 'Cuenta creada. Inicia sesión.');
-      router.back();
+
     } catch (e: any) {
-      Alert.alert('Error', e?.message ?? 'No se pudo registrar');
+      Toast.error(e?.message ?? 'No se pudo registrar');
     } finally {
       setLoading(false);
     }
