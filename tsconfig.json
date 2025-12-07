@@ -24,7 +24,10 @@
       ],
       "@/config/*": [
         "src/config/*"
-      ]
+      ],
+      "@/context/*": [
+        "src/context/*"
+      ],
     }
   },
   "include": [

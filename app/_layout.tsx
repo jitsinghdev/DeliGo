@@ -9,6 +9,7 @@ import ToastManager from "toastify-react-native";
 import { toastConfig } from '@/src/config/toastConfig';
 
 import { useColorScheme } from '@/components/useColorScheme';
+import { AuthProvider } from '@/context/AuthContext';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -51,12 +52,15 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-      </Stack>
-      <ToastManager style={toastConfig}/> 
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+        </Stack>
+        <ToastManager style={toastConfig} />
+      </ThemeProvider>
+    </AuthProvider>
+
   );
 }

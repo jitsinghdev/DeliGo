@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Platform, Pressable, StyleSheet, TextInput, Image, TouchableOpacity, Alert, KeyboardAvoidingView, ScrollView } from 'react-native';
 import { Text, View } from '@/components/Themed';
@@ -6,15 +6,14 @@ import { useRouter } from 'expo-router';
 import { login } from '@/api/auth';
 import { Ionicons } from '@expo/vector-icons';
 import { Toast } from 'toastify-react-native';
-import { login as loginApi } from '@/src/api/auth';
-
+import { useAuth } from '@/context/AuthContext';
 
 export default function ModalScreen() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-
+  const { setLoggedIn } = useAuth();
 
   const handleLogin = async () => {
     try {
@@ -30,6 +29,7 @@ export default function ModalScreen() {
       }
 
       if (res.success) {
+        setLoggedIn(true);
         Toast.success(message);
         router.back();
       } else {

@@ -7,6 +7,8 @@ import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
 import { useClientOnlyValue } from '@/components/useClientOnlyValue';
 
+import { useAuth } from '@/context/AuthContext';
+
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>['name'];
@@ -17,6 +19,7 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const { loggedIn } = useAuth();  
 
   return (
     <Tabs
@@ -32,7 +35,7 @@ export default function TabLayout() {
                 <FontAwesome
                   name="user"
                   size={25}
-                  color={Colors[colorScheme ?? 'light'].text}
+                  color={loggedIn ? 'red' : 'black'} // cambia a azul si loggedIn
                   style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
                 />
               )}

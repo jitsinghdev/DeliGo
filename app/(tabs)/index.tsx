@@ -2,6 +2,7 @@ import { StyleSheet } from 'react-native';
 
 import EditScreenInfo from '@/components/EditScreenInfo';
 import { Text, View } from '@/components/Themed';
+import { AuthProvider } from '@/context/AuthContext';
 
 export default function TabOneScreen() {
   return (
